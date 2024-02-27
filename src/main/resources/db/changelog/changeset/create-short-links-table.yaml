@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: creation-short-links-table
+      author: Yury
+      changes:
+        - createTable:
+            tableName: short_links
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: token
+                  type: varchar(15)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: creation_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiration_date
+                  type: timestamp
+              - column:
+                  name: long_link_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: short_links
+            baseColumnNames: long_link_id
+            referencedTableName: long_links
+            referencedColumnNames: id
+            constraintName: short_link_long_link_fk

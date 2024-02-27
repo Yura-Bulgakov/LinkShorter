@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: creation-long-links-table
+      author: Yury
+      changes:
+        - createTable:
+            tableName: long_links
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: long_link
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: long_links
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: long_link_user_fk

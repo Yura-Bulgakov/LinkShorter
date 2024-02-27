@@ -9,14 +9,14 @@ public class LongLink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
     @Column(name = "long_link")
     private String longLink;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public LongLink(Integer id, String longLink, User user) {
+    public LongLink(Long id, String longLink, User user) {
         this.id = id;
         this.longLink = longLink;
         this.user = user;
@@ -25,11 +25,11 @@ public class LongLink {
     public LongLink() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

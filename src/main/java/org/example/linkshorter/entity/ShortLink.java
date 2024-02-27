@@ -11,7 +11,7 @@ public class ShortLink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
     @Column(name = "token", nullable = false)
     private String token;
     @Column(name = "creation_date", nullable = false)
@@ -22,7 +22,7 @@ public class ShortLink {
     @JoinColumn(name = "long_link_id", referencedColumnName = "id", nullable = false)
     private LongLink longLink;
 
-    public ShortLink(Integer id, String token, Timestamp creationDate, Timestamp expirationDate, LongLink longLink) {
+    public ShortLink(Long id, String token, Timestamp creationDate, Timestamp expirationDate, LongLink longLink) {
         this.id = id;
         this.token = token;
         this.creationDate = creationDate;
@@ -33,11 +33,11 @@ public class ShortLink {
     public ShortLink() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
