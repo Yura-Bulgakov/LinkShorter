@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: inserting-initial-users
+      author: Yury
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: "admin"
+              - column:
+                  name: password
+                  value: "$2a$10$RXigfx2RTuDy5w2DDwb1DO90CXI7uzuFrK.g4BYpfmCFZK6pKNkgK"
+              - column:
+                  name: email
+                  value: "admin@gmail.com"
+              - column:
+                  name: role_id
+                  value: "1"
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: "user1"
+              - column:
+                  name: password
+                  value: "$2a$10$RXigfx2RTuDy5w2DDwb1DO90CXI7uzuFrK.g4BYpfmCFZK6pKNkgK"
+              - column:
+                  name: email
+                  value: "user1@gmail.com"
+              - column:
+                  name: role_id
+                  value: "2"

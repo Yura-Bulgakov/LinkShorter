@@ -11,10 +11,11 @@ public class Role {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false)
-    private String name;
+    private UserRole name;
 
-    public Role(Long id, String name) {
+    public Role(Long id, UserRole name) {
         this.id = id;
         this.name = name;
     }
@@ -30,11 +31,11 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
+    public UserRole getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(UserRole name) {
         this.name = name;
     }
 
@@ -43,7 +44,7 @@ public class Role {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return Objects.equals(id, role.id) && Objects.equals(name, role.name);
+        return Objects.equals(id, role.id) && name == role.name;
     }
 
     @Override
