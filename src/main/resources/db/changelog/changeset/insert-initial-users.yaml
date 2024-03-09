@@ -17,7 +17,7 @@ databaseChangeLog:
                   value: "admin@gmail.com"
               - column:
                   name: role_id
-                  value: "1"
+                  valueComputed: "(SELECT id FROM roles WHERE name = 'ROLE_ADMIN')"
 
         - insert:
             tableName: users
@@ -33,4 +33,4 @@ databaseChangeLog:
                   value: "user1@gmail.com"
               - column:
                   name: role_id
-                  value: "2"
+                  valueComputed: "(SELECT id FROM roles WHERE name = 'ROLE_USER')"

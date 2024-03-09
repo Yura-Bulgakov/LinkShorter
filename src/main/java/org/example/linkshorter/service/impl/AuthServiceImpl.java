@@ -1,10 +1,11 @@
-package org.example.linkshorter.service;
+package org.example.linkshorter.service.impl;
 
 import org.example.linkshorter.dto.RegistrationDto;
 import org.example.linkshorter.entity.User;
 import org.example.linkshorter.entity.UserRole;
 import org.example.linkshorter.repository.RoleRepository;
 import org.example.linkshorter.repository.UserRepository;
+import org.example.linkshorter.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
