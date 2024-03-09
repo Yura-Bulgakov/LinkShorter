@@ -1,7 +1,7 @@
 package org.example.linkshorter.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -12,14 +12,18 @@ public class Click {
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "click_date")
-    private Timestamp clickDate;
+    private LocalDateTime clickDate;
+
+    @Column(name = "client_Ip")
+    private String clientIp;
+
     @ManyToOne
     @JoinColumn(name = "short_link_id", referencedColumnName = "id")
     private ShortLink shortLink;
 
-    public Click(Long id, Timestamp clickDate, ShortLink shortLink) {
-        this.id = id;
+    public Click(LocalDateTime clickDate, String clientIp, ShortLink shortLink) {
         this.clickDate = clickDate;
+        this.clientIp = clientIp;
         this.shortLink = shortLink;
     }
 
@@ -34,11 +38,11 @@ public class Click {
         this.id = id;
     }
 
-    public Timestamp getClickDate() {
+    public LocalDateTime getClickDate() {
         return clickDate;
     }
 
-    public void setClickDate(Timestamp clickDate) {
+    public void setClickDate(LocalDateTime clickDate) {
         this.clickDate = clickDate;
     }
 
@@ -50,16 +54,25 @@ public class Click {
         this.shortLink = shortLink;
     }
 
+    public String getClientIp() {
+        return clientIp;
+    }
+
+    public void setClientIp(String clientIp) {
+        this.clientIp = clientIp;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Click click = (Click) o;
-        return Objects.equals(id, click.id) && Objects.equals(clickDate, click.clickDate) && Objects.equals(shortLink, click.shortLink);
+        return Objects.equals(id, click.id) && Objects.equals(clickDate, click.clickDate) && Objects.equals(clientIp, click.clientIp) && Objects.equals(shortLink, click.shortLink);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, clickDate, shortLink);
+        return Objects.hash(id, clickDate, clientIp, shortLink);
     }
+
 }

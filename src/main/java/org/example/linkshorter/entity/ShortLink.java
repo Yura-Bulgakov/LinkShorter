@@ -1,7 +1,7 @@
 package org.example.linkshorter.entity;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -15,14 +15,14 @@ public class ShortLink {
     @Column(name = "token", nullable = false)
     private String token;
     @Column(name = "creation_date", nullable = false)
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
     @Column(name = "expiration_date")
-    private Timestamp expirationDate;
+    private LocalDateTime expirationDate;
     @ManyToOne
     @JoinColumn(name = "long_link_id", referencedColumnName = "id", nullable = false)
     private LongLink longLink;
 
-    public ShortLink(Long id, String token, Timestamp creationDate, Timestamp expirationDate, LongLink longLink) {
+    public ShortLink(Long id, String token, LocalDateTime creationDate, LocalDateTime expirationDate, LongLink longLink) {
         this.id = id;
         this.token = token;
         this.creationDate = creationDate;
@@ -49,19 +49,19 @@ public class ShortLink {
         this.token = token;
     }
 
-    public Timestamp getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Timestamp creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Timestamp getExpirationDate() {
+    public LocalDateTime getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Timestamp expirationDate) {
+    public void setExpirationDate(LocalDateTime expirationDate) {
         this.expirationDate = expirationDate;
     }
 

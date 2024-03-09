@@ -31,6 +31,10 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
+              - column:
+                  name: banned
+                  type: boolean
+                  defaultValueBoolean: false
         - addForeignKeyConstraint:
             baseTableName: users
             baseColumnNames: role_id

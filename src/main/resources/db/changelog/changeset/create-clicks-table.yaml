@@ -19,6 +19,9 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: client_ip
+                  type: varchar(50)
+              - column:
                   name: short_link_id
                   type: bigint
                   constraints:

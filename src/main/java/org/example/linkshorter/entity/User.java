@@ -20,6 +20,9 @@ public class User {
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
+    @Column(name = "banned")
+    private Boolean banned;
+
     public User(Long id, String username, String password, String email, Role role) {
         this.id = id;
         this.username = username;
