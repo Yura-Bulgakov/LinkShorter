@@ -41,3 +41,4 @@ databaseChangeLog:
             referencedTableName: roles
             referencedColumnNames: id
             constraintName: user_role_fk
+            onDelete: SET NULL

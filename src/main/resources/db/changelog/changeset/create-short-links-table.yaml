@@ -37,3 +37,4 @@ databaseChangeLog:
             referencedTableName: long_links
             referencedColumnNames: id
             constraintName: short_link_long_link_fk
+            onDelete: CASCADE

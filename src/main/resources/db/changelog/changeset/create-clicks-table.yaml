@@ -32,3 +32,4 @@ databaseChangeLog:
             referencedTableName: short_links
             referencedColumnNames: id
             constraintName: click_short_link_fk
+            onDelete: CASCADE

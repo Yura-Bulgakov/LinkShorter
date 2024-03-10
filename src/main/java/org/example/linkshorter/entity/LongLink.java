@@ -22,6 +22,11 @@ public class LongLink {
         this.user = user;
     }
 
+    public LongLink(String longLink, User user) {
+        this.longLink = longLink;
+        this.user = user;
+    }
+
     public LongLink() {
     }
 

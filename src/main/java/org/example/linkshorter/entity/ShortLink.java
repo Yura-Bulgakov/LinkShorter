@@ -30,6 +30,13 @@ public class ShortLink {
         this.longLink = longLink;
     }
 
+    public ShortLink(String token, LocalDateTime creationDate, LocalDateTime expirationDate, LongLink longLink) {
+        this.token = token;
+        this.creationDate = creationDate;
+        this.expirationDate = expirationDate;
+        this.longLink = longLink;
+    }
+
     public ShortLink() {
     }
 

@@ -9,4 +9,8 @@ import java.util.Optional;
 @Repository
 public interface ShortLinkRepository extends CrudRepository<ShortLink, Long> {
     Optional<ShortLink> findByToken(String token);
+
+    boolean existsByToken(String token);
+
+    void deleteByToken(String token);
 }
