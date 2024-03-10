@@ -14,17 +14,8 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: user_id
-                  type: bigint
-              - column:
                   name: long_link
                   type: varchar(100)
                   constraints:
                     nullable: false
-        - addForeignKeyConstraint:
-            baseTableName: long_links
-            baseColumnNames: user_id
-            referencedTableName: users
-            referencedColumnNames: id
-            constraintName: long_link_user_fk
-            onDelete: SET NULL
+

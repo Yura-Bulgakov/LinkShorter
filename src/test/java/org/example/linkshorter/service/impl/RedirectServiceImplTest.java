@@ -33,8 +33,8 @@ class RedirectServiceImplTest {
     void testValidRedirect() {
         String token = "validToken";
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        ShortLink shortLink = new ShortLink(1L, token, LocalDateTime.now(), null,
-                new LongLink(1L, "https://www.baeldung.com/spring-redirect-and-forward", null));
+        LongLink longLink = new LongLink(1L, "https://www.baeldung.com/spring-redirect-and-forward", null);
+        ShortLink shortLink = new ShortLink(1L, token, LocalDateTime.now(), null, longLink);
 
         when(shortLinkRepository.findByToken(token)).thenReturn(Optional.of(shortLink));
         String redirectUrl = redirectService.redirect(token, request);

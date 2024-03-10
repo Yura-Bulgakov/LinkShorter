@@ -1,7 +1,11 @@
 package org.example.linkshorter.entity;
 
+import org.hibernate.proxy.HibernateProxy;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -16,14 +20,15 @@ public class User {
     private String password;
     @Column(name = "email")
     private String email;
-    @OneToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
-    private Role role;
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private UserRole role;
     @Column(name = "banned")
     private Boolean banned;
+    @ManyToMany(mappedBy = "users")
+    private Set<LongLink> longLinks = new HashSet<>();
 
-    public User(Long id, String username, String password, String email, Role role) {
+    public User(Long id, String username, String password, String email, UserRole role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -66,24 +71,43 @@ public class User {
         this.email = email;
     }
 
-    public Role getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(email, user.email) && Objects.equals(role, user.role);
+    public Boolean getBanned() {
+        return banned;
+    }
+
+    public void setBanned(Boolean banned) {
+        this.banned = banned;
+    }
+
+    public Set<LongLink> getLongLinks() {
+        return longLinks;
+    }
+
+    public void setLongLinks(Set<LongLink> longLinks) {
+        this.longLinks = longLinks;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, username, password, email, role);
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        User user = (User) o;
+        return getId() != null && Objects.equals(getId(), user.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

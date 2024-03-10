@@ -1,5 +1,7 @@
 package org.example.linkshorter.entity;
 
+import org.hibernate.proxy.HibernateProxy;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -21,6 +23,9 @@ public class ShortLink {
     @ManyToOne
     @JoinColumn(name = "long_link_id", referencedColumnName = "id", nullable = false)
     private LongLink longLink;
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
+    private User user;
 
     public ShortLink(Long id, String token, LocalDateTime creationDate, LocalDateTime expirationDate, LongLink longLink) {
         this.id = id;
@@ -80,16 +85,27 @@ public class ShortLink {
         this.longLink = longLink;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ShortLink shortLink = (ShortLink) o;
-        return Objects.equals(id, shortLink.id) && Objects.equals(token, shortLink.token) && Objects.equals(creationDate, shortLink.creationDate) && Objects.equals(expirationDate, shortLink.expirationDate) && Objects.equals(longLink, shortLink.longLink);
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, token, creationDate, expirationDate, longLink);
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        ShortLink shortLink = (ShortLink) o;
+        return getId() != null && Objects.equals(getId(), shortLink.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

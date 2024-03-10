@@ -1,6 +1,9 @@
 package org.example.linkshorter.service.impl;
 
-import org.example.linkshorter.entity.*;
+import org.example.linkshorter.entity.LongLink;
+import org.example.linkshorter.entity.ShortLink;
+import org.example.linkshorter.entity.User;
+import org.example.linkshorter.entity.UserRole;
 import org.example.linkshorter.repository.LongLinkRepository;
 import org.example.linkshorter.repository.ShortLinkRepository;
 import org.example.linkshorter.repository.UserRepository;
@@ -18,26 +21,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class LinkServiceImplTest {
-
     @Mock
     private LongLinkRepository longLinkRepository;
-
     @Mock
     private ShortLinkRepository shortLinkRepository;
-
     @Mock
     private UserRepository userRepository;
-
     @Mock
     private TokenGenerator tokenGenerator;
-
     @Mock
     private LinkValidator linkValidator;
-
     @InjectMocks
     private LinkServiceImpl linkService;
 
@@ -45,7 +43,7 @@ class LinkServiceImplTest {
     void testAddLinkWithUser() {
         String longLink = "https://yury.com";
         User user = new User(1L, "username", "password", "email@mail.ru",
-                new Role(1L, UserRole.ROLE_USER));
+                UserRole.ROLE_USER);
 
         Authentication authentication = mock(Authentication.class);
         when(authentication.isAuthenticated()).thenReturn(true);
@@ -77,6 +75,33 @@ class LinkServiceImplTest {
     }
 
     @Test
+    void testAddLinkWithExistingLinkAndUser() {
+        String longLink = "https://yury.com";
+        LongLink existingLink = new LongLink(longLink);
+        User user = new User(1L, "username", "password", "email@mail.ru",
+                UserRole.ROLE_USER);
+
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(authentication.getPrincipal()).thenReturn(new UserDetailsImpl(user));
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(userRepository.findByUsername(any(String.class))).thenReturn(Optional.of(user));
+        when(linkValidator.isValid(longLink)).thenReturn(true);
+        when(longLinkRepository.findByLongLink(longLink)).thenReturn(Optional.of(existingLink));
+
+        linkService.addLink(longLink);
+
+        verify(longLinkRepository, times(1)).save(existingLink);
+
+        assertTrue(existingLink.getUsers().contains(user));
+        assertTrue(user.getLongLinks().contains(existingLink));
+    }
+
+    @Test
     void testAddEmptyLink() {
         String invalidLink = "";
         assertThrows(IllegalArgumentException.class, () -> linkService.addLink(invalidLink));
@@ -92,7 +117,7 @@ class LinkServiceImplTest {
     @Test
     void testAddTokenToExistingLink() {
         String longLink = "https://yury.com";
-        LongLink longLinkEntity = new LongLink(1L, longLink, null);
+        LongLink longLinkEntity = new LongLink(longLink);
         String token = "token";
         when(longLinkRepository.findByLongLink(longLink)).thenReturn(Optional.of(longLinkEntity));
         when(tokenGenerator.generateTokenForString(longLink)).thenReturn(token);
@@ -104,7 +129,7 @@ class LinkServiceImplTest {
     void testAddExistingTokenToLink() {
         String longLink = "https://yury.com";
         String existingToken = "token";
-        LongLink longLinkEntity = new LongLink(1L, longLink, null);
+        LongLink longLinkEntity = new LongLink(longLink);
         when(longLinkRepository.findByLongLink(longLink)).thenReturn(Optional.of(longLinkEntity));
         when(tokenGenerator.generateTokenForString(longLink)).thenReturn(existingToken);
         when(shortLinkRepository.existsByToken(existingToken)).thenReturn(true);

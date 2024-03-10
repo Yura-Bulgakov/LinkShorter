@@ -26,19 +26,14 @@ databaseChangeLog:
               - column:
                   name: email
                   type: varchar(100)
+                  constraints:
+                    nullable: false
               - column:
-                  name: role_id
-                  type: bigint
+                  name: role
+                  type: varchar(50)
                   constraints:
                     nullable: false
               - column:
                   name: banned
                   type: boolean
                   defaultValueBoolean: false
-        - addForeignKeyConstraint:
-            baseTableName: users
-            baseColumnNames: role_id
-            referencedTableName: roles
-            referencedColumnNames: id
-            constraintName: user_role_fk
-            onDelete: SET NULL

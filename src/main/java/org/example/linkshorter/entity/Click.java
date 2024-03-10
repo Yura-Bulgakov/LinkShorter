@@ -1,5 +1,7 @@
 package org.example.linkshorter.entity;
 
+import org.hibernate.proxy.HibernateProxy;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -63,16 +65,18 @@ public class Click {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public final boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
         Click click = (Click) o;
-        return Objects.equals(id, click.id) && Objects.equals(clickDate, click.clickDate) && Objects.equals(clientIp, click.clientIp) && Objects.equals(shortLink, click.shortLink);
+        return getId() != null && Objects.equals(getId(), click.getId());
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, clickDate, clientIp, shortLink);
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
-
 }

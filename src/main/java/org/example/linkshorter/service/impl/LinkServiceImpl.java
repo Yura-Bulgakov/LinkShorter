@@ -48,7 +48,13 @@ public class LinkServiceImpl implements CreationLinkService, DestroyLinkService 
     public void addLink(String longLink) {
         validateLink(longLink);
         User user = getUserFromAuthContext();
-        saveNewLink(longLink, user);
+        LongLink existingLink = longLinkRepository.findByLongLink(longLink)
+                .orElse(null);
+        if (existingLink != null && user != null) {
+            addExistingLinkToUser(existingLink, user);
+        } else {
+            saveNewLink(longLink, user);
+        }
     }
 
     @Override
@@ -101,17 +107,29 @@ public class LinkServiceImpl implements CreationLinkService, DestroyLinkService 
         }
     }
 
+    private void addExistingLinkToUser(LongLink existingLink, User user) {
+        existingLink.getUsers().add(user);
+        user.getLongLinks().add(existingLink);
+        longLinkRepository.save(existingLink);
+    }
+
     private void saveNewLink(String longLink, User user) {
-        LongLink newLink = new LongLink(longLink, user);
+        LongLink newLink = new LongLink(longLink);
+        if (user != null) {
+            newLink.getUsers().add(user);
+            user.getLongLinks().add(newLink);
+        }
         longLinkRepository.save(newLink);
     }
 
     private void saveNewToken(String token, LongLink linkForToken) {
+        User user = getUserFromAuthContext();
         ShortLink newToken = new ShortLink();
         newToken.setToken(token);
-        newToken.setCreationDate(LocalDateTime.now());
-        newToken.setExpirationDate(linkForToken.getUser() == null ? LocalDateTime.now().plusDays(3) : null);
         newToken.setLongLink(linkForToken);
+        newToken.setUser(user);
+        newToken.setCreationDate(LocalDateTime.now());
+        newToken.setExpirationDate(user == null ? LocalDateTime.now().plusDays(3) : null);
         shortLinkRepository.save(newToken);
     }
 
