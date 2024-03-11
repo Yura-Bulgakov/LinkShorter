@@ -27,21 +27,6 @@ public class ShortLink {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
     private User user;
 
-    public ShortLink(Long id, String token, LocalDateTime creationDate, LocalDateTime expirationDate, LongLink longLink) {
-        this.id = id;
-        this.token = token;
-        this.creationDate = creationDate;
-        this.expirationDate = expirationDate;
-        this.longLink = longLink;
-    }
-
-    public ShortLink(String token, LocalDateTime creationDate, LocalDateTime expirationDate, LongLink longLink) {
-        this.token = token;
-        this.creationDate = creationDate;
-        this.expirationDate = expirationDate;
-        this.longLink = longLink;
-    }
-
     public ShortLink() {
     }
 

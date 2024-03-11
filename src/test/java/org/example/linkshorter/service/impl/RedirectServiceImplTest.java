@@ -13,7 +13,6 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,8 +32,10 @@ class RedirectServiceImplTest {
     void testValidRedirect() {
         String token = "validToken";
         HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
-        LongLink longLink = new LongLink(1L, "https://www.baeldung.com/spring-redirect-and-forward", null);
-        ShortLink shortLink = new ShortLink(1L, token, LocalDateTime.now(), null, longLink);
+        LongLink longLink = new LongLink("https://www.baeldung.com/spring-redirect-and-forward");
+        ShortLink shortLink = new ShortLink();
+        shortLink.setToken(token);
+        shortLink.setLongLink(longLink);
 
         when(shortLinkRepository.findByToken(token)).thenReturn(Optional.of(shortLink));
         String redirectUrl = redirectService.redirect(token, request);

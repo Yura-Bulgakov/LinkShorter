@@ -16,25 +16,8 @@ public class LongLink {
     private Long id;
     @Column(name = "long_link")
     private String longLink;
-    @ManyToMany
-    @JoinTable(
-            name = "user_longlink",
-            joinColumns = @JoinColumn(name = "long_link_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> users = new HashSet<>();
-
-
-    public LongLink(Long id, String longLink, Set<User> users) {
-        this.id = id;
-        this.longLink = longLink;
-        this.users = users;
-    }
-
-    public LongLink(String longLink, Set<User> users) {
-        this.longLink = longLink;
-        this.users = users;
-    }
+    @OneToMany(mappedBy = "longLink")
+    private Set<ShortLink> shortLinks = new HashSet<>();
 
     public LongLink(String longLink) {
         this.longLink = longLink;
@@ -59,12 +42,12 @@ public class LongLink {
         this.longLink = longLink;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Set<ShortLink> getShortLinks() {
+        return shortLinks;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setShortLinks(Set<ShortLink> shortLinks) {
+        this.shortLinks = shortLinks;
     }
 
     @Override

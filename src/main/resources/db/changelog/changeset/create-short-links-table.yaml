@@ -31,10 +31,23 @@ databaseChangeLog:
                   type: bigint
                   constraints:
                     nullable: false
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: true
         - addForeignKeyConstraint:
             baseTableName: short_links
             baseColumnNames: long_link_id
             referencedTableName: long_links
             referencedColumnNames: id
             constraintName: short_link_long_link_fk
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: short_links
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: short_link_user_fk
             onDelete: CASCADE

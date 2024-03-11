@@ -25,16 +25,8 @@ public class User {
     private UserRole role;
     @Column(name = "banned")
     private Boolean banned;
-    @ManyToMany(mappedBy = "users")
-    private Set<LongLink> longLinks = new HashSet<>();
-
-    public User(Long id, String username, String password, String email, UserRole role) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-    }
+    @OneToMany(mappedBy = "user")
+    private Set<ShortLink> shortLinks = new HashSet<>();
 
     public User() {
     }
@@ -87,12 +79,12 @@ public class User {
         this.banned = banned;
     }
 
-    public Set<LongLink> getLongLinks() {
-        return longLinks;
+    public Set<ShortLink> getShortLinks() {
+        return shortLinks;
     }
 
-    public void setLongLinks(Set<LongLink> longLinks) {
-        this.longLinks = longLinks;
+    public void setShortLinks(Set<ShortLink> shortLinks) {
+        this.shortLinks = shortLinks;
     }
 
     @Override
