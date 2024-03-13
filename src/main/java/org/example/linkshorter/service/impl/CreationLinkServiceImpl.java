@@ -6,35 +6,31 @@ import org.example.linkshorter.entity.ShortLink;
 import org.example.linkshorter.entity.User;
 import org.example.linkshorter.repository.LongLinkRepository;
 import org.example.linkshorter.repository.ShortLinkRepository;
-import org.example.linkshorter.repository.UserRepository;
 import org.example.linkshorter.service.CreationLinkService;
+import org.example.linkshorter.util.AuthUtil;
 import org.example.linkshorter.util.LinkValidator;
 import org.example.linkshorter.util.TokenGenerator;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
 public class CreationLinkServiceImpl implements CreationLinkService {
     private final LongLinkRepository longLinkRepository;
     private final ShortLinkRepository shortLinkRepository;
-    private final UserRepository userRepository;
     private final TokenGenerator tokenGenerator;
     private final LinkValidator linkValidator;
+    private final AuthUtil authUtil;
     private final Random random;
 
-    public CreationLinkServiceImpl(LongLinkRepository longLinkRepository, ShortLinkRepository shortLinkRepository, UserRepository userRepository, TokenGenerator tokenGenerator, LinkValidator linkValidator) {
+    public CreationLinkServiceImpl(LongLinkRepository longLinkRepository, ShortLinkRepository shortLinkRepository, TokenGenerator tokenGenerator, LinkValidator linkValidator, AuthUtil authUtil) {
         this.longLinkRepository = longLinkRepository;
         this.shortLinkRepository = shortLinkRepository;
-        this.userRepository = userRepository;
         this.tokenGenerator = tokenGenerator;
         this.linkValidator = linkValidator;
+        this.authUtil = authUtil;
         this.random = new Random();
     }
 
@@ -57,7 +53,7 @@ public class CreationLinkServiceImpl implements CreationLinkService {
 
     private void createShortLink(String longLink, String token) {
         validateLink(longLink);
-        User user = getUserFromAuthContext();
+        User user = authUtil.getUserFromAuthContext();
         LongLink url = longLinkRepository.findByLongLink(longLink).orElse(new LongLink(longLink));
         ShortLink shortLink = new ShortLink();
         shortLink.setLongLink(url);
@@ -82,17 +78,6 @@ public class CreationLinkServiceImpl implements CreationLinkService {
             token = tokenGenerator.generateTokenForString(longLink + random.nextLong());
         }
         return token;
-    }
-
-    private User getUserFromAuthContext() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
-            return user.orElse(null);
-        } else {
-            return null;
-        }
     }
 
     private void validateLink(String link) {

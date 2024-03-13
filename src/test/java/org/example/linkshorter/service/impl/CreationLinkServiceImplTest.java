@@ -5,8 +5,7 @@ import org.example.linkshorter.entity.ShortLink;
 import org.example.linkshorter.entity.User;
 import org.example.linkshorter.repository.LongLinkRepository;
 import org.example.linkshorter.repository.ShortLinkRepository;
-import org.example.linkshorter.repository.UserRepository;
-import org.example.linkshorter.security.UserDetailsImpl;
+import org.example.linkshorter.util.AuthUtil;
 import org.example.linkshorter.util.LinkValidator;
 import org.example.linkshorter.util.TokenGenerator;
 import org.junit.jupiter.api.Test;
@@ -14,9 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
@@ -31,11 +27,11 @@ class CreationLinkServiceImplTest {
     @Mock
     private ShortLinkRepository shortLinkRepository;
     @Mock
-    private UserRepository userRepository;
-    @Mock
     private TokenGenerator tokenGenerator;
     @Mock
     private LinkValidator linkValidator;
+    @Mock
+    private AuthUtil authUtil;
     @InjectMocks
     private CreationLinkServiceImpl creationLinkService;
 
@@ -47,41 +43,24 @@ class CreationLinkServiceImplTest {
         user.setUsername("test");
 
         when(linkValidator.isValid(longLink)).thenReturn(true);
-
-        Authentication authentication = mock(Authentication.class);
-        when(authentication.isAuthenticated()).thenReturn(true);
-        when(authentication.getPrincipal()).thenReturn(new UserDetailsImpl(user));
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-
-        when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(authUtil.getUserFromAuthContext()).thenReturn(user);
 
         creationLinkService.addLink(longLink, token);
 
         verify(linkValidator).isValid(longLink);
-        verify(userRepository).findByUsername(user.getUsername());
         verify(shortLinkRepository).save(any(ShortLink.class));
     }
 
     @Test
-    public void testAddLinkWithoutTokenWithoutAuthentication() {
+    public void testAddLinkWithoutTokenWithoutUser() {
         String longLink = "https://yury.com";
 
         when(linkValidator.isValid(longLink)).thenReturn(true);
-
-        Authentication authentication = mock(Authentication.class);
-        when(authentication.isAuthenticated()).thenReturn(false);
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
+        when(authUtil.getUserFromAuthContext()).thenReturn(null);
 
         creationLinkService.addLink(longLink);
 
         verify(linkValidator).isValid(longLink);
-        verify(userRepository, never()).findByUsername(anyString());
         verify(shortLinkRepository).save(any(ShortLink.class));
     }
 
