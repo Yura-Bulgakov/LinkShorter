@@ -10,9 +10,10 @@ import org.example.linkshorter.security.UserDetailsImpl;
 import org.example.linkshorter.util.LinkValidator;
 import org.example.linkshorter.util.TokenGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class CreationLinkServiceImplTest {
     @Mock
     private LongLinkRepository longLinkRepository;
@@ -92,9 +93,7 @@ class CreationLinkServiceImplTest {
         existingLink.setLongLink(longLink);
 
         when(linkValidator.isValid(longLink)).thenReturn(true);
-
         when(longLinkRepository.findByLongLink(longLink)).thenReturn(Optional.of(existingLink));
-        when(tokenGenerator.generateTokenForString(anyString())).thenReturn(token);
 
         creationLinkService.addLink(longLink, token);
 

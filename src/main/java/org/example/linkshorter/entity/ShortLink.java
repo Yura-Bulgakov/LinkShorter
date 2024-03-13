@@ -4,7 +4,9 @@ import org.hibernate.proxy.HibernateProxy;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "short_links")
@@ -26,6 +28,8 @@ public class ShortLink {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = true)
     private User user;
+    @OneToMany(mappedBy = "shortLink")
+    private Set<Click> clicks = new HashSet<>();
 
     public ShortLink() {
     }

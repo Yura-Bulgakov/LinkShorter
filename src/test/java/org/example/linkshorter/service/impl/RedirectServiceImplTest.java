@@ -7,10 +7,11 @@ import org.example.linkshorter.repository.ClickRepository;
 import org.example.linkshorter.repository.ShortLinkRepository;
 import org.example.linkshorter.service.exception.LinkNotFoundException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class RedirectServiceImplTest {
     @Mock
     private ShortLinkRepository shortLinkRepository;

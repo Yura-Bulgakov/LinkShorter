@@ -9,5 +9,7 @@ public interface PagingLinkService {
 
     Page<ShortLink> findByUsername(String username, Pageable pageable);
 
-    Page<ShortLink> findByTokenOrId(String token, Long id, Pageable pageable);
+    Page<ShortLink> findByToken(String token, Pageable pageable);
+
+    Page<ShortLink> findAll(Pageable pageable);
 }

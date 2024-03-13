@@ -4,14 +4,15 @@ import org.example.linkshorter.dto.RegistrationDto;
 import org.example.linkshorter.entity.User;
 import org.example.linkshorter.repository.UserRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class AuthServiceImplTest {
     @Mock
     private UserRepository userRepository;
