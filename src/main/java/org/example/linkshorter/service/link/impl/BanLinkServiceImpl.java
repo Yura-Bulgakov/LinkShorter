@@ -1,6 +1,7 @@
 package org.example.linkshorter.service.link.impl;
 
 import org.example.linkshorter.entity.LongLink;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.repository.LongLinkRepository;
 import org.example.linkshorter.service.exception.LinkNotFoundException;
 import org.example.linkshorter.service.link.BanLinkService;
@@ -19,12 +20,14 @@ public class BanLinkServiceImpl implements BanLinkService {
 
     @Override
     @Transactional
+    @ServiceLogging
     public void banById(Long id) {
         setBanStatus(id, true);
     }
 
     @Override
     @Transactional
+    @ServiceLogging
     public void unbanById(Long id) {
         setBanStatus(id, false);
     }

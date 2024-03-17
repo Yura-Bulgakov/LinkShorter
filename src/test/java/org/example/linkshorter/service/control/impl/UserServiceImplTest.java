@@ -11,6 +11,7 @@ import org.example.linkshorter.mapping.LinkMapper;
 import org.example.linkshorter.mapping.UserMapper;
 import org.example.linkshorter.repository.ShortLinkRepository;
 import org.example.linkshorter.service.click.PagingClickService;
+import org.example.linkshorter.service.exception.TokenNotFoundException;
 import org.example.linkshorter.service.exception.UserNotFoundException;
 import org.example.linkshorter.service.link.DestroyLinkService;
 import org.example.linkshorter.service.link.PagingShortLinkService;
@@ -145,7 +146,7 @@ class UserServiceImplTest {
         when(authUtil.getUserFromAuthContext()).thenReturn(user);
         when(shortLinkRepository.findById(2L)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> userService.getUserTokenClicks(2L, Pageable.unpaged()));
+        assertThrows(TokenNotFoundException.class, () -> userService.getUserTokenClicks(2L, Pageable.unpaged()));
         verify(authUtil, times(1)).getUserFromAuthContext();
         verify(shortLinkRepository, times(1)).findById(2L);
         verify(pagingClickService, never()).findByTokenId(anyLong(), any());
@@ -177,7 +178,7 @@ class UserServiceImplTest {
         when(authUtil.getUserFromAuthContext()).thenReturn(user);
         when(shortLinkRepository.findById(2L)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> userService.deleteUserToken(2L));
+        assertThrows(TokenNotFoundException.class, () -> userService.deleteUserToken(2L));
         verify(authUtil, times(1)).getUserFromAuthContext();
         verify(shortLinkRepository, times(1)).findById(2L);
         verify(destroyLinkService, never()).deleteToken(anyLong());

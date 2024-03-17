@@ -1,5 +1,6 @@
 package org.example.linkshorter.service.link.impl;
 
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.repository.LongLinkRepository;
 import org.example.linkshorter.repository.ShortLinkRepository;
 import org.example.linkshorter.service.link.DestroyLinkService;
@@ -21,24 +22,28 @@ public class DestroyLinkServiceImpl implements DestroyLinkService {
 
     @Override
     @Transactional
+    @ServiceLogging
     public void deleteLink(String longLink) {
         longLinkRepository.deleteByLongLink(longLink);
     }
 
     @Override
     @Transactional
+    @ServiceLogging
     public void deleteToken(String token) {
         shortLinkRepository.deleteByToken(token);
     }
 
     @Override
     @Transactional
+    @ServiceLogging
     public void deleteLink(Long longLinkId) {
         longLinkRepository.deleteById(longLinkId);
     }
 
     @Override
     @Transactional
+    @ServiceLogging
     public void deleteToken(Long tokenId) {
         shortLinkRepository.deleteById(tokenId);
     }

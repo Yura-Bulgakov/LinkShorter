@@ -3,6 +3,7 @@ package org.example.linkshorter.service.control.impl;
 import org.example.linkshorter.entity.Click;
 import org.example.linkshorter.entity.LongLink;
 import org.example.linkshorter.entity.ShortLink;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.repository.ClickRepository;
 import org.example.linkshorter.repository.ShortLinkRepository;
 import org.example.linkshorter.service.control.RedirectService;
@@ -29,6 +30,7 @@ public class RedirectServiceImpl implements RedirectService {
 
     @Override
     @Transactional
+    @ServiceLogging
     public String redirect(String token, HttpServletRequest request) {
         if (token == null || token.isEmpty()) {
             throw new IllegalArgumentException("Токен не должен быть пустым");

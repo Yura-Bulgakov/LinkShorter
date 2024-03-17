@@ -1,6 +1,7 @@
 package org.example.linkshorter.util;
 
 import org.example.linkshorter.dto.UserEditDto;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -13,6 +14,7 @@ public class UserEditValidator implements Validator {
     }
 
     @Override
+    @ServiceLogging
     public void validate(Object target, Errors errors) {
         UserEditDto userEditDto = (UserEditDto) target;
         if (userEditDto.getPassword() != null && userEditDto.getConfirmPassword() == null) {

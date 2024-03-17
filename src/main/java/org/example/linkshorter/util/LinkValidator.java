@@ -3,6 +3,7 @@ package org.example.linkshorter.util;
 import org.apache.commons.lang3.StringUtils;
 import org.example.linkshorter.dto.TokenCreationDto;
 import org.example.linkshorter.entity.LongLink;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.repository.LongLinkRepository;
 import org.example.linkshorter.repository.ShortLinkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,7 @@ public class LinkValidator implements Validator {
     }
 
     @Override
+    @ServiceLogging
     public void validate(Object target, Errors errors) {
         TokenCreationDto tokenCreationDto = (TokenCreationDto) target;
         if (!StringUtils.isEmpty(tokenCreationDto.getToken())

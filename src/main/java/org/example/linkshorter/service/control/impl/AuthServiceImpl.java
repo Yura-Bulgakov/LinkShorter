@@ -3,6 +3,7 @@ package org.example.linkshorter.service.control.impl;
 import org.example.linkshorter.dto.RegistrationDto;
 import org.example.linkshorter.entity.User;
 import org.example.linkshorter.entity.UserRole;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.repository.UserRepository;
 import org.example.linkshorter.service.control.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
+    @ServiceLogging
     public void register(RegistrationDto registrationInfo) {
         User newUser = new User();
         newUser.setId(null);

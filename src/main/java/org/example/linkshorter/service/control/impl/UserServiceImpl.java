@@ -5,11 +5,13 @@ import org.example.linkshorter.dto.ShortLinkDto;
 import org.example.linkshorter.dto.UserEditDto;
 import org.example.linkshorter.dto.UserInfoDto;
 import org.example.linkshorter.entity.User;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.mapping.LinkMapper;
 import org.example.linkshorter.mapping.UserMapper;
 import org.example.linkshorter.repository.ShortLinkRepository;
 import org.example.linkshorter.service.click.PagingClickService;
 import org.example.linkshorter.service.control.UserService;
+import org.example.linkshorter.service.exception.TokenNotFoundException;
 import org.example.linkshorter.service.exception.UserNotFoundException;
 import org.example.linkshorter.service.link.DestroyLinkService;
 import org.example.linkshorter.service.link.PagingShortLinkService;
@@ -44,39 +46,44 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @ServiceLogging
     public UserInfoDto getUserInfo() {
         User user = getUser();
         return userMapper.userToUserInfoDto(user);
     }
 
     @Override
+    @ServiceLogging
     public void updateUser(UserEditDto updateInfo) {
         updateUserService.update(updateInfo.getEmail(), updateInfo.getPassword());
     }
 
     @Override
+    @ServiceLogging
     public Page<ShortLinkDto> getUserTokens(Pageable pageable) {
         User user = getUser();
         return pagingShortLinkService.findByUserId(user.getId(), pageable).map(linkMapper::shortLinkToShortLinkDto);
     }
 
     @Override
+    @ServiceLogging
     public Page<ClickDto> getUserTokenClicks(Long tokenId, Pageable pageable) {
         User user = getUser();
         if (shortLinkRepository.findById(tokenId).filter(x -> x.getUser().equals(user)).isPresent()) {
             return pagingClickService.findByTokenId(tokenId, pageable).map(linkMapper::clickTpClickDto);
         } else {
-            throw new RuntimeException("У пользователя отсутсвует токен с id: " + tokenId); ///// Заменить на свое ислючение
+            throw new TokenNotFoundException("У пользователя отсутсвует токен с id: " + tokenId);
         }
     }
 
     @Override
+    @ServiceLogging
     public void deleteUserToken(Long tokenId) {
         User user = getUser();
         if (shortLinkRepository.findById(tokenId).filter(x -> x.getUser().equals(user)).isPresent()) {
             destroyLinkService.deleteToken(tokenId);
         } else {
-            throw new RuntimeException("У пользователя отсутсвует токен с id: " + tokenId); ///// Заменить на свое ислючение
+            throw new TokenNotFoundException("У пользователя отсутсвует токен с id: " + tokenId);
         }
     }
 

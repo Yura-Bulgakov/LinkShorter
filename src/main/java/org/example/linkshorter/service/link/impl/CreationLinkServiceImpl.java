@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.example.linkshorter.entity.LongLink;
 import org.example.linkshorter.entity.ShortLink;
 import org.example.linkshorter.entity.User;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.repository.LongLinkRepository;
 import org.example.linkshorter.repository.ShortLinkRepository;
 import org.example.linkshorter.service.link.CreationLinkService;
@@ -36,6 +37,7 @@ public class CreationLinkServiceImpl implements CreationLinkService {
 
     @Override
     @Transactional
+    @ServiceLogging
     public ShortLink addLink(String longLink, String token) {
         if (isEmptyToken(token)) {
             return addLink(longLink);
@@ -46,6 +48,7 @@ public class CreationLinkServiceImpl implements CreationLinkService {
 
     @Override
     @Transactional
+    @ServiceLogging
     public ShortLink addLink(String longLink) {
         return createShortLink(longLink, generateToken(longLink));
     }

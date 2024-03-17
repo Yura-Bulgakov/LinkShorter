@@ -2,6 +2,7 @@ package org.example.linkshorter.service.user.impl;
 
 import org.apache.commons.lang3.StringUtils;
 import org.example.linkshorter.entity.User;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.repository.UserRepository;
 import org.example.linkshorter.service.user.UpdateUserService;
 import org.example.linkshorter.util.AuthUtil;
@@ -25,6 +26,7 @@ public class UpdateUserServiceImpl implements UpdateUserService {
 
     @Override
     @Transactional
+    @ServiceLogging
     public void update(String email, String password) {
         User user = authUtil.getUserFromAuthContext();
         if (user != null) {

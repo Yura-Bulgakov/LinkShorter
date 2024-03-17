@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.example.linkshorter.dto.LongLinkDto;
 import org.example.linkshorter.dto.ShortLinkDto;
 import org.example.linkshorter.dto.UserInfoDto;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.mapping.LinkMapper;
 import org.example.linkshorter.mapping.UserMapper;
 import org.example.linkshorter.service.control.AdminService;
@@ -45,6 +46,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @ServiceLogging
     public Page<UserInfoDto> getUsersByParameter(Long userId, String username, Pageable pageable) {
         if (userId != null) {
             return new PageImpl<>(Collections.singletonList(getUserById(userId)));
@@ -56,6 +58,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @ServiceLogging
     public Page<ShortLinkDto> getTokensByParameter(Long userId, String username, String token, Pageable pageable) {
         if (userId != null) {
             return getAllShortLinksByUserId(userId, pageable);
@@ -68,6 +71,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @ServiceLogging
     public Page<LongLinkDto> getLongLinksByParameter(Long id, String token, String username, Pageable pageable) {
         if (id != null) {
             return new PageImpl<>(Collections.singletonList(getLongLinkById(id)));
@@ -80,11 +84,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @ServiceLogging
     public void deleteShortLink(Long shortLinkId) {
         destroyLinkService.deleteToken(shortLinkId);
     }
 
     @Override
+    @ServiceLogging
     public void changeUserBanStatus(Long userId, boolean banStatus) {
         if (banStatus) {
             userBanService.banById(userId);
@@ -94,6 +100,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    @ServiceLogging
     public void changeLongLinkForbiddenStatus(Long longLinkId, boolean forbiddenStatus) {
         if (forbiddenStatus) {
             banLinkService.banById(longLinkId);

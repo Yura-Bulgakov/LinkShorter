@@ -2,6 +2,7 @@ package org.example.linkshorter.util;
 
 
 import org.example.linkshorter.dto.RegistrationDto;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.repository.UserRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -22,6 +23,7 @@ public class RegistrationValidator implements Validator {
     }
 
     @Override
+    @ServiceLogging
     public void validate(Object target, Errors errors) {
         RegistrationDto registrationDto = (RegistrationDto) target;
 

@@ -1,5 +1,6 @@
 package org.example.linkshorter.util;
 
+import org.example.linkshorter.logger.ServiceLogging;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,7 @@ public class TokenGenerator {
         }
     }
 
+    @ServiceLogging
     public String generateTokenForString(String str) {
         if (str == null || str.isEmpty()) {
             throw new IllegalArgumentException("Строка не должна быть пустой");

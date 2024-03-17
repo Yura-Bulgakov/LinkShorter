@@ -1,6 +1,7 @@
 package org.example.linkshorter.service.user.impl;
 
 import org.example.linkshorter.entity.User;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.repository.UserRepository;
 import org.example.linkshorter.service.exception.UserNotFoundException;
 import org.example.linkshorter.service.user.UserBanService;
@@ -19,12 +20,14 @@ public class UserBanServiceImpl implements UserBanService {
 
     @Override
     @Transactional
+    @ServiceLogging
     public void banById(Long id) {
         setBanStatus(id, true);
     }
 
     @Override
     @Transactional
+    @ServiceLogging
     public void unbanById(Long id) {
         setBanStatus(id, false);
     }

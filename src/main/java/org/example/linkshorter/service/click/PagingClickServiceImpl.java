@@ -1,6 +1,7 @@
 package org.example.linkshorter.service.click;
 
 import org.example.linkshorter.entity.Click;
+import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.repository.ClickRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ public class PagingClickServiceImpl implements PagingClickService {
     }
 
     @Override
+    @ServiceLogging
     public Page<Click> findByTokenId(Long tokenId, Pageable pageable) {
         return clickRepository.findByShortLinkId(tokenId, pageable);
     }
