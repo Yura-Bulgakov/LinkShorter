@@ -2,12 +2,62 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Main</title>
+    <title>Главная</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
 <body>
-Main page
-<form th:action="@{/logout}" th:method="POST">
-    <input type="submit" value="Logout"/>
-</form>
+<th:block th:include="/_navbar"></th:block>
+
+<div class="container mt-5">
+    <h1>Добавление ссылки</h1>
+    <form th:action="@{/link/creation/form}" method="post" th:object="${tokenInfo}">
+        <div th:if="${#fields.hasErrors('token')}" class="text-danger">
+            <span th:errors="*{token}"></span>
+        </div>
+        <div th:if="${#fields.hasErrors('url')}" class="text-danger">
+            <span th:errors="*{url}"></span>
+        </div>
+        <div class="form-group">
+            <label for="url">Длинная ссылка:</label>
+            <input type="text" class="form-control" id="url" th:field="*{url}" required>
+        </div>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="customTokenCheckbox">
+            <label class="form-check-label" for="customTokenCheckbox">Задать токен самому</label>
+        </div>
+        <div class="form-group row" id="tokenField" style="display: none;">
+            <label for="token" class="col-sm-2 col-form-label">Токен:</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="token" th:field="*{token}">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Создать</button>
+    </form>
+
+    <div th:if="${success}" class="alert alert-success mt-3" role="alert">
+        Короткая ссылка успешно создана.
+    </div>
+</div>
+
+<th:block th:include="/_footer"></th:block>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var customTokenCheckbox = document.getElementById('customTokenCheckbox');
+        var tokenField = document.getElementById('tokenField');
+        var tokenInput = document.getElementById('token');
+        if (!customTokenCheckbox.checked) {
+            tokenInput.value = '';
+        }
+        customTokenCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                tokenField.style.display = 'block';
+            } else {
+                tokenField.style.display = 'none';
+                tokenInput.value = '';
+            }
+        });
+    });
+</script>
 </body>
 </html>

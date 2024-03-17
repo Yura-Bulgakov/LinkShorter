@@ -15,7 +15,11 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: long_link
-                  type: varchar(100)
+                  type: varchar(2000)
                   constraints:
                     nullable: false
+              - column:
+                  name: forbidden
+                  type: boolean
+                  defaultValueBoolean: false
 

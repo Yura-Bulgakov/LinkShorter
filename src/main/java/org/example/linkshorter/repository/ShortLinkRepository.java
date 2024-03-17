@@ -20,6 +20,4 @@ public interface ShortLinkRepository extends PagingAndSortingRepository<ShortLin
 
     Page<ShortLink> findByUserUsername(String username, Pageable pageable);
 
-    Page<ShortLink> findByToken(String token, Pageable pageable);
-
 }

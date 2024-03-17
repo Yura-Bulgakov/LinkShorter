@@ -1,7 +1,7 @@
 package org.example.linkshorter.controller;
 
 import org.example.linkshorter.dto.RegistrationDto;
-import org.example.linkshorter.service.AuthService;
+import org.example.linkshorter.service.control.AuthService;
 import org.example.linkshorter.util.RegistrationValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -16,6 +16,8 @@ public class LongLink {
     private Long id;
     @Column(name = "long_link")
     private String longLink;
+    @Column(name = "forbidden")
+    private boolean forbidden;
     @OneToMany(mappedBy = "longLink")
     private Set<ShortLink> shortLinks = new HashSet<>();
 
@@ -40,6 +42,14 @@ public class LongLink {
 
     public void setLongLink(String longLink) {
         this.longLink = longLink;
+    }
+
+    public boolean isForbidden() {
+        return forbidden;
+    }
+
+    public void setForbidden(boolean forbidden) {
+        this.forbidden = forbidden;
     }
 
     public Set<ShortLink> getShortLinks() {

@@ -82,6 +82,14 @@ public class ShortLink {
         this.user = user;
     }
 
+    public Set<Click> getClicks() {
+        return clicks;
+    }
+
+    public void setClicks(Set<Click> clicks) {
+        this.clicks = clicks;
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

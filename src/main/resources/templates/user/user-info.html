@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Информация о пользователе</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<th:block th:include="/_navbar"></th:block>
+
+<div class="container mt-5">
+    <h1>Информация о пользователе</h1>
+    <div>
+        <p>Имя пользователя: <span th:text="${user.username}"></span></p>
+        <p>Email: <span th:text="${user.email}"></span></p>
+        <p>Количество токенов: <span th:text="${user.tokenCounts}"></span></p>
+        <p>Количество переадресаций: <span th:text="${user.redirectCounts}"></span></p>
+    </div>
+    <a href="/user/edit" class="btn btn-primary">Редактировать профиль</a>
+    <form th:action="@{/logout}" th:method="POST" style="display: inline;">
+        <input type="submit" value="Выйти" class="btn btn-danger">
+    </form>
+</div>
+
+<th:block th:include="/_footer"></th:block>
+</body>
+</html>

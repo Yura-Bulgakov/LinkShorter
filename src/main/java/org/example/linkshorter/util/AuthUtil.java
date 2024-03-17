@@ -21,7 +21,7 @@ public class AuthUtil {
 
     public User getUserFromAuthContext() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated()) {
+        if (authentication != null && authentication.isAuthenticated() && authentication.getPrincipal() instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
             return user.orElse(null);

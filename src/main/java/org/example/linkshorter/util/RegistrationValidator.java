@@ -26,7 +26,7 @@ public class RegistrationValidator implements Validator {
         RegistrationDto registrationDto = (RegistrationDto) target;
 
         if (userRepository.existsByUsername(registrationDto.getUsername())) {
-            errors.rejectValue("username", "deplicate.username",
+            errors.rejectValue("username", "duplicate.username",
                     "Имя пользователя уже существует!");
         }
 

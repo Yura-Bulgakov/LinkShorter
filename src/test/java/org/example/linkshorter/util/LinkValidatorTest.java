@@ -1,15 +1,24 @@
 package org.example.linkshorter.util;
 
+import org.example.linkshorter.repository.ShortLinkRepository;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
+@ExtendWith(MockitoExtension.class)
 class LinkValidatorTest {
 
-    private final LinkValidator linkValidator = new LinkValidator();
+    @Mock
+    private ShortLinkRepository shortLinkRepository;
+    @InjectMocks
+    private LinkValidator linkValidator;
 
     @Test
     void testValidateValidLink() {

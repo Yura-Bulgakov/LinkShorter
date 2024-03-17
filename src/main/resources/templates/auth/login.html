@@ -2,23 +2,46 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Вход</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <style>
+        .custom-center {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
-<form name="auth_form" method="post" action="/process_login">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+<div class="container">
+    <h2 class="mt-5 custom-center">Вход в систему</h2>
+    <form name="auth_form" method="post" action="/process_login" class="mt-5">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-    <label for="username">Введите имя пользователя: </label>
-    <input type="text" name="username" id="username"/>
-    <br/>
-    <label for="password">Введите пароль: </label>
-    <input type="password" name="password" id="password"/>
-    <br/>
-    <input type="submit" value="Войти"/>
-    <div th:if="${param.error}" style="color: red">
-        Неправильные имя или пароль
+        <div class="form-group row">
+            <div class="col-sm-4 offset-sm-4">
+                <input type="text" name="username" id="username" class="form-control"
+                       placeholder="Введите имя пользователя"/>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-4 offset-sm-4 mt-3">
+                <input type="password" name="password" id="password" class="form-control" placeholder="Введите пароль"/>
+            </div>
+        </div>
+        <div class="col-sm-4 offset-sm-4 custom-center">
+            <button type="submit" class="btn btn-primary btn-md">Войти</button>
+        </div>
+
+        <div th:if="${param.error}" class="text-danger mt-3 custom-center">
+            Неправильное имя пользователя или пароль
+        </div>
+    </form>
+
+    <div class="mt-3 custom-center">
+        <p>Еще не зарегистрированы? <a href="/auth/registration">Зарегистрироваться</a></p>
     </div>
-</form>
+</div>
+
 </body>
 </html>
