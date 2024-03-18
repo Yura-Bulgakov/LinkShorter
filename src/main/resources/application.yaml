@@ -3,6 +3,9 @@ server:
 
 token:
   length: 8
+rkn:
+  web:
+    api: https://rknweb.ru/api/v2/domains/
 
 spring:
   datasource:

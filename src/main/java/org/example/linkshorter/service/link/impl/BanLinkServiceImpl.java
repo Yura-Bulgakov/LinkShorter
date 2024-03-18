@@ -32,10 +32,33 @@ public class BanLinkServiceImpl implements BanLinkService {
         setBanStatus(id, false);
     }
 
+    @Override
+    @Transactional
+    @ServiceLogging
+    public void banByLongLink(String longLink) {
+        setBanStatus(longLink, true);
+    }
+
+    @Override
+    @Transactional
+    @ServiceLogging
+    public void unbanByLongLink(String longLink) {
+        setBanStatus(longLink, false);
+    }
+
     private void setBanStatus(Long id, boolean forbidden) {
         LongLink longLink = longLinkRepository.findById(id)
                 .orElseThrow(() -> new LinkNotFoundException("Ссылка не найдена, id: " + id));
         longLink.setForbidden(forbidden);
         longLinkRepository.save(longLink);
+    }
+
+    private void setBanStatus(String longLink, boolean forbidden) {
+        if (longLinkRepository.findByLongLink(longLink).isEmpty()) {
+            return;
+        }
+        LongLink link = longLinkRepository.findByLongLink(longLink).get();
+        link.setForbidden(forbidden);
+        longLinkRepository.save(link);
     }
 }
