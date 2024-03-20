@@ -50,7 +50,7 @@ public class RknWebDomainLoader implements RknDomainLoader {
             }
             return domainList;
         } catch (Exception e) {
-            logger.info("Произошло исключение '{}' при попытке получить список заблокированных доменов: {}",
+            logger.error("Произошло исключение '{}' при попытке получить список заблокированных доменов: {}",
                     e.getClass().getSimpleName(), e.getMessage());
             throw new DomainsNotFoundException("Список заблокированных доменов не найден");
         }

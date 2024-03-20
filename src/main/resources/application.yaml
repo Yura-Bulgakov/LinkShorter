@@ -5,7 +5,8 @@ token:
   length: 8
 rkn:
   web:
-    api: https://rknweb.ru/api/v2/domains/
+    api: https://reestr.rublacklist.net/api/v3/domains/
+#    https://rknweb.ru/api/v3/domains/
 
 spring:
   datasource:
