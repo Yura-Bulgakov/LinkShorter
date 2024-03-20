@@ -20,7 +20,7 @@ public class RedirectController {
         this.redirectService = redirectService;
     }
 
-    @GetMapping("/{token}")
+    @RequestMapping("/{token}")
     public RedirectView redirect(@PathVariable String token, HttpServletRequest request) {
         return new RedirectView(redirectService.redirect(token, request));
     }

@@ -11,6 +11,7 @@ import org.example.linkshorter.service.link.CreationLinkService;
 import org.example.linkshorter.util.AuthUtil;
 import org.example.linkshorter.util.LinkValidator;
 import org.example.linkshorter.util.TokenGenerator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,9 @@ public class CreationLinkServiceImpl implements CreationLinkService {
     private final LinkValidator linkValidator;
     private final AuthUtil authUtil;
     private final Random random;
+
+    @Value("${token.live:3}")
+    private int tokenLiveDays;
 
     public CreationLinkServiceImpl(LongLinkRepository longLinkRepository, ShortLinkRepository shortLinkRepository, TokenGenerator tokenGenerator, LinkValidator linkValidator, AuthUtil authUtil) {
         this.longLinkRepository = longLinkRepository;
@@ -64,7 +68,7 @@ public class CreationLinkServiceImpl implements CreationLinkService {
         shortLink.setToken(token);
         shortLink.setUser(user);
         shortLink.setCreationDate(LocalDateTime.now());
-        shortLink.setExpirationDate(user == null ? LocalDateTime.now().plusDays(3) : null);
+        shortLink.setExpirationDate(user == null ? LocalDateTime.now().plusDays(tokenLiveDays) : null);
         return saveLinkAndToken(shortLink, url, user);
     }
 

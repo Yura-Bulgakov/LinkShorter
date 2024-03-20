@@ -34,3 +34,22 @@ databaseChangeLog:
               - column:
                   name: role
                   value: "ROLE_USER"
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: "user2"
+              - column:
+                  name: password
+                  value: "$2a$10$RXigfx2RTuDy5w2DDwb1DO90CXI7uzuFrK.g4BYpfmCFZK6pKNkgK"
+              - column:
+                  name: email
+                  value: "user2@gmail.com"
+              - column:
+                  name: role
+                  value: "ROLE_USER"
+              - column:
+                  name: banned
+                  valueBoolean: true

@@ -3,6 +3,7 @@ server:
 
 token:
   length: 8
+  live: 3
 rkn:
   web:
     api: https://reestr.rublacklist.net/api/v3/domains/

@@ -3,6 +3,7 @@ package org.example.linkshorter.service.control.impl;
 import org.example.linkshorter.entity.Click;
 import org.example.linkshorter.entity.LongLink;
 import org.example.linkshorter.entity.ShortLink;
+import org.example.linkshorter.entity.User;
 import org.example.linkshorter.logger.ServiceLogging;
 import org.example.linkshorter.repository.ClickRepository;
 import org.example.linkshorter.repository.ShortLinkRepository;
@@ -37,9 +38,15 @@ public class RedirectServiceImpl implements RedirectService {
         }
         ShortLink shortLink = shortLinkRepository.findByToken(token)
                 .orElseThrow(() -> new LinkNotFoundException("Ссылка по токену: " + token + " не найдена"));
+        User user = shortLink.getUser();
+        if (user!= null && user.getBanned()){
+            throw new ForbiddenLinkException(
+                    String.format("Невозможен переход по токену %s, заблокированного пользователя %s ",
+                    shortLink.getToken(), user.getUsername()));
+        }
         LongLink longLink = shortLink.getLongLink();
         if (longLink.isForbidden()) {
-            throw new ForbiddenLinkException("Ссылка заблокирована, url: " + longLink.getLongLink());
+            throw new ForbiddenLinkException("Ссылка заблокирована, token: " + token);
         }
         if (shortLink.getExpirationDate() != null && shortLink.getExpirationDate().isBefore(LocalDateTime.now())) {
             throw new ExpiredTokenException(String.format("Время жизни токена %s истекло %s ",

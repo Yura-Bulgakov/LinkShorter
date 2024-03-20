@@ -41,7 +41,7 @@ class RknDomainCheckServiceTest {
 
         domainCheckService.checkLongLinkDomains();
 
-        verify(banLinkService, times(1)).banByLongLink("blocked-domain.com");
+        verify(banLinkService, times(1)).banByLongLink("https://blocked-domain.com");
         verify(banLinkService, never()).banByLongLink("non-blocked-domain.com");
         verify(linkValidator, atLeast(2)).getDomain(anyString());
     }
