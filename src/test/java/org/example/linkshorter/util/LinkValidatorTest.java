@@ -1,5 +1,8 @@
 package org.example.linkshorter.util;
 
+import org.example.linkshorter.dto.TokenCreationDto;
+import org.example.linkshorter.entity.LongLink;
+import org.example.linkshorter.repository.LongLinkRepository;
 import org.example.linkshorter.repository.ShortLinkRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,15 +11,21 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
 class LinkValidatorTest {
-
     @Mock
     private ShortLinkRepository shortLinkRepository;
+    @Mock
+    private LongLinkRepository longLinkRepository;
     @InjectMocks
     private LinkValidator linkValidator;
 
@@ -101,6 +110,52 @@ class LinkValidatorTest {
             assertEquals(expectedDomain, linkValidator.getDomain(url));
         }
     }
+
+    @Test
+    public void testValidateWithInvalidToken() {
+        TokenCreationDto dto = new TokenCreationDto();
+        dto.setToken("invalid-token!");
+        Errors errors = new BeanPropertyBindingResult(dto, "tokenCreationDto");
+
+        linkValidator.validate(dto, errors);
+
+        assertEquals(1, errors.getErrorCount());
+        assertEquals("Токен содержит недопустимые символы! Допустимы латинские заглавные и прописные буквы и цифры 0-9",
+                errors.getFieldError("token").getDefaultMessage());
+    }
+
+    @Test
+    public void testValidateWithDuplicateToken() {
+        TokenCreationDto dto = new TokenCreationDto();
+        dto.setToken("validtoken");
+
+        when(shortLinkRepository.existsByToken("validtoken")).thenReturn(true);
+        Errors errors = new BeanPropertyBindingResult(dto, "tokenCreationDto");
+
+        linkValidator.validate(dto, errors);
+
+        assertEquals(1, errors.getErrorCount());
+        assertEquals("Токен уже существует!", errors.getFieldError("token").getDefaultMessage());
+    }
+
+    @Test
+    public void testValidateWithForbiddenUrl() {
+        String url = "http://test.ru";
+        LongLink link = new LongLink(url);
+        link.setForbidden(true);
+        TokenCreationDto dto = new TokenCreationDto();
+        dto.setUrl(url);
+
+        when(longLinkRepository.findByLongLink(url)).thenReturn(Optional.of(link));
+        Errors errors = new BeanPropertyBindingResult(dto, "tokenCreationDto");
+
+        linkValidator.validate(dto, errors);
+
+        assertEquals(1, errors.getErrorCount());
+        assertEquals("Ссылка заблокирована!", errors.getFieldError("url").getDefaultMessage());
+    }
+
+
 
 
 }

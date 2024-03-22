@@ -25,7 +25,7 @@ public class UserEditValidator implements Validator {
                     "Поле 'пароль' не должно быть пустым");
         }
 
-        if (userEditDto.getPassword() != null &&
+        if (userEditDto.getPassword() != null && userEditDto.getConfirmPassword() != null &&
                 !userEditDto.getPassword().equals(userEditDto.getConfirmPassword())) {
             errors.rejectValue("confirmPassword", "password.mismatch",
                     "Пароли не совпадают");

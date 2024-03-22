@@ -53,13 +53,19 @@ public class LinkValidator implements Validator {
     @ServiceLogging
     public void validate(Object target, Errors errors) {
         TokenCreationDto tokenCreationDto = (TokenCreationDto) target;
-        if (!StringUtils.isEmpty(tokenCreationDto.getToken())
-                && shortLinkRepository.existsByToken(tokenCreationDto.getToken())) {
-            errors.rejectValue("token", "duplicate.token",
-                    "Токен уже существует!");
+        String token = tokenCreationDto.getToken();
+        String url = tokenCreationDto.getUrl();
+        if (!StringUtils.isEmpty(token)) {
+            if (!token.matches("[A-Za-z0-9]+")) {
+                errors.rejectValue("token", "invalid.token",
+                        "Токен содержит недопустимые символы! " +
+                                "Допустимы латинские заглавные и прописные буквы и цифры 0-9");
+            }
+            if (shortLinkRepository.existsByToken(token)) {
+                errors.rejectValue("token", "duplicate.token", "Токен уже существует!");
+            }
         }
-        if (longLinkRepository.findByLongLink(tokenCreationDto.getUrl())
-                .filter(LongLink::isForbidden).isPresent()) {
+        if (!StringUtils.isEmpty(url) && longLinkRepository.findByLongLink(url).filter(LongLink::isForbidden).isPresent()) {
             errors.rejectValue("url", "invalid.url", "Ссылка заблокирована!");
         }
     }

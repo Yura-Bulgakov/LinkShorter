@@ -13,7 +13,7 @@ public class LongLingVerifier {
         this.domainCheckService = domainCheckService;
     }
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "${scheduling.long-link.verifier:0 0 0 * * *}")
     public void scheduledCheck() {
         try {
             domainCheckService.checkLongLinkDomains();

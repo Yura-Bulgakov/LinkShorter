@@ -39,10 +39,10 @@ public class RedirectServiceImpl implements RedirectService {
         ShortLink shortLink = shortLinkRepository.findByToken(token)
                 .orElseThrow(() -> new LinkNotFoundException("Ссылка по токену: " + token + " не найдена"));
         User user = shortLink.getUser();
-        if (user!= null && user.getBanned()){
+        if (user != null && user.getBanned()) {
             throw new ForbiddenLinkException(
-                    String.format("Невозможен переход по токену %s, заблокированного пользователя %s ",
-                    shortLink.getToken(), user.getUsername()));
+                    String.format("Невозможен переход по токену %s, заблокированного пользователя",
+                            shortLink.getToken()));
         }
         LongLink longLink = shortLink.getLongLink();
         if (longLink.isForbidden()) {

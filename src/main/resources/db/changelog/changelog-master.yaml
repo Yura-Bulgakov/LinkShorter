@@ -1,13 +1,13 @@
 databaseChangeLog:
   - include:
-      file: db/changelog/changeset/create-users-table.yaml
+      file: classpath:db/changelog/changeset/create-users-table.yaml
   - include:
-      file: db/changelog/changeset/create-long-links-table.yaml
+      file: classpath:db/changelog/changeset/create-long-links-table.yaml
   - include:
-      file: db/changelog/changeset/create-short-links-table.yaml
+      file: classpath:db/changelog/changeset/create-short-links-table.yaml
   - include:
-      file: db/changelog/changeset/create-clicks-table.yaml
+      file: classpath:db/changelog/changeset/create-clicks-table.yaml
   - include:
-      file: db/changelog/changeset/insert-initial-users.yaml
+      file: classpath:db/changelog/changeset/insert-initial-users.yaml
   - include:
-      file: db/changelog/changeset/insert-initial-links.yaml
+      file: classpath:db/changelog/changeset/insert-Initial-links.yaml

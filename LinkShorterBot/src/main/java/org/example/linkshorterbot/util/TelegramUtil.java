@@ -1,9 +1,11 @@
 package org.example.linkshorterbot.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.linkshorterbot.bot.TelegramBot;
 import org.example.linkshorterbot.model.Constants;
 import org.example.linkshorterbot.model.TokenCreationRequest;
 import org.example.linkshorterbot.state.State;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -13,6 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class TelegramUtil {
     private static TelegramBot bot;
     private static RestTemplate restTemplate = new RestTemplate();
+    private static final ObjectMapper jsonParser = new ObjectMapper();
 
     public static void setSender(TelegramBot bot) {
         TelegramUtil.bot = bot;
@@ -20,6 +23,7 @@ public class TelegramUtil {
 
     public static void executeSendMessage(long chatId, String message) {
         SendMessage sendMessage = new SendMessage(String.valueOf(chatId), message);
+        sendMessage.enableHtml(true);
         try {
             bot.execute(sendMessage);
         } catch (TelegramApiException e) {
@@ -39,21 +43,31 @@ public class TelegramUtil {
     }
 
     public static State postRequestForToken(long chatId, TokenCreationRequest request) {
-        String serviceResponse = "";
         try {
-            serviceResponse = restTemplate.postForObject(Constants.TOKEN_GENERATOR_PATH, request, String.class);
-        } catch (Exception e) {
-            TelegramUtil.executeSendMessage(chatId, "Ошибка при запросе к сервису");
-        }
-        if (serviceResponse != null && serviceResponse.startsWith("Токен")) {
-            TelegramUtil.executeSendMessage(chatId, serviceResponse +
-                    "\nДля перехода по токену воспользуйтесь ссылкой: \n" +
-                    Constants.REDIRECT_PATH + serviceResponse.split(" ")[1]);
+            String response = restTemplate.postForObject(Constants.TOKEN_GENERATOR_PATH, request, String.class);
+            if (response != null && response.startsWith("Токен")) {
+                String redirectStr = Constants.REDIRECT_PATH + response.split(" ")[1];
+                String hrefStr = String.format("<a href='%s'>%s</a>", redirectStr, redirectStr);
+                executeSendMessage(chatId, response +
+                        "\nДля перехода по токену воспользуйтесь ссылкой: \n" + hrefStr);
+            }
             return State.NONE;
-        } else {
-            TelegramUtil.promptWithKeyboard(chatId, "Не удалось создать токен. Попробуйте снова.",
-                    KeyboardFactory.getTokenSelectionKeyboard());
-            return State.GENERATION_TOKEN_SELECTION;
+        } catch (RestClientException e) {
+            try {
+                executeSendMessage(chatId, extractErrorMessage(e.getMessage()));
+                promptWithKeyboard(chatId, "Не удалось создать токен. Попробуйте снова.",
+                        KeyboardFactory.getTokenSelectionKeyboard());
+                return State.GENERATION_TOKEN_SELECTION;
+            } catch (Exception ex) {
+                executeSendMessage(chatId, "Не удалось обработать ответ от сервиса");
+                return State.NONE;
+            }
         }
+    }
+
+    private static String extractErrorMessage(String errorResponse) {
+        String[] errorParts = errorResponse.split("\"defaultMessage\":");
+        String lastPart = errorParts[errorParts.length - 1];
+        return lastPart.split("\"")[1];
     }
 }

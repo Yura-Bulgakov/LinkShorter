@@ -5,8 +5,11 @@
 Для запуска приложения необходимо:
 - JDK 11
 - Maven
+- БД PostgreSQL 15 (строка подключения к базе данных указывается в application.yaml)
 
 ## Инструкции по сборке и запуску
+
+### Запуск основного приложения
 
 1. Склонируйте репозиторий с GitHub:
 
@@ -24,15 +27,17 @@
 
        java -jar target/LinkShorter-0.0.1-SNAPSHOT.jar
 
-5. Перейдите в пакет с модулем Telegram бота:
+### Запуск телеграм бота
 
-        cd LinkShorterBot
+1. Перейдите в пакет с модулем Telegram бота:
 
-6. Соберите проект бота с помощью Maven:
+        cd LinkShorter\LinkShorterBot
+
+2. Соберите проект бота с помощью Maven:
 
        mvn clean package
 
-7. Запустите приложение телеграм бота:
+3. Запустите приложение телеграм бота:
 
        java -jar target/LinkShorterBot-0.0.1-SNAPSHOT.jar
 

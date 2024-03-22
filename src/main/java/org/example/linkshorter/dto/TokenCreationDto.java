@@ -12,6 +12,7 @@ public class TokenCreationDto {
     @URL(message = "Не валидная ссылка")
     private String url;
 
+    @Size(min = 1, max = 15, message = "Длина токена должна быть от 1 до 15 символов")
     private String token;
 
     public String getUrl() {

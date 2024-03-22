@@ -9,6 +9,10 @@ rkn:
     api: https://reestr.rublacklist.net/api/v3/domains/
 #    https://rknweb.ru/api/v3/domains/
 
+scheduling:
+  long-link:
+    verifier: "0 0 0 * * *"
+
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
