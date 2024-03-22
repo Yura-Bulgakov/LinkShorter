@@ -1,9 +1,6 @@
 package org.example.linkshorterbot.model;
 
 public class Constants {
-    public static final String TOKEN_GENERATOR_PATH = "http://localhost:8080/link/creation/json";
-    public static final String REDIRECT_PATH = "http://127.0.0.1:8080/r/";
-
     public static final String START_DESCRIPTION = "Начать диалог с ботом";
     public static final String START_TEXT = "Добро пожаловать, вас встречает LinkShorterBot." +
             "\nПожалуйста введите ваше имя";

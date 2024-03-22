@@ -18,7 +18,10 @@ import java.util.stream.Collectors;
 
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
-
+    @Value("${path.token.generation}")
+    private String tokenGenerationPath;
+    @Value("${path.redirect}")
+    private String redirectPath;
     private final ResponseHandler responseHandler;
     private final Map<String, Command> mapCommand;
 
@@ -56,4 +59,19 @@ public class TelegramBot extends TelegramLongPollingBot {
         return botName;
     }
 
+    public String getTokenGenerationPath() {
+        return tokenGenerationPath;
+    }
+
+    public void setTokenGenerationPath(String tokenGenerationPath) {
+        this.tokenGenerationPath = tokenGenerationPath;
+    }
+
+    public String getRedirectPath() {
+        return redirectPath;
+    }
+
+    public void setRedirectPath(String redirectPath) {
+        this.redirectPath = redirectPath;
+    }
 }

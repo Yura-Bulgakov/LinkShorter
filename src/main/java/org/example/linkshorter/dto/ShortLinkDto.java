@@ -55,4 +55,16 @@ public class ShortLinkDto {
     public void setUserId(Long userId) {
         this.userId = userId;
     }
+
+    @Override
+    public String toString() {
+        return "ShortLinkDto{" +
+                "tokenId=" + tokenId +
+                ", url='" + url + '\'' +
+                ", token='" + token + '\'' +
+                ", clicks=" + clicks +
+                ", username='" + username + '\'' +
+                ", userId=" + userId +
+                '}';
+    }
 }

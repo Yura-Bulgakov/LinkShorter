@@ -1,8 +1,6 @@
 package org.example.linkshorterbot.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.linkshorterbot.bot.TelegramBot;
-import org.example.linkshorterbot.model.Constants;
 import org.example.linkshorterbot.model.TokenCreationRequest;
 import org.example.linkshorterbot.state.State;
 import org.springframework.web.client.RestClientException;
@@ -15,7 +13,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class TelegramUtil {
     private static TelegramBot bot;
     private static RestTemplate restTemplate = new RestTemplate();
-    private static final ObjectMapper jsonParser = new ObjectMapper();
 
     public static void setSender(TelegramBot bot) {
         TelegramUtil.bot = bot;
@@ -44,9 +41,9 @@ public class TelegramUtil {
 
     public static State postRequestForToken(long chatId, TokenCreationRequest request) {
         try {
-            String response = restTemplate.postForObject(Constants.TOKEN_GENERATOR_PATH, request, String.class);
+            String response = restTemplate.postForObject(bot.getTokenGenerationPath(), request, String.class);
             if (response != null && response.startsWith("Токен")) {
-                String redirectStr = Constants.REDIRECT_PATH + response.split(" ")[1];
+                String redirectStr = bot.getRedirectPath() + response.split(" ")[1];
                 String hrefStr = String.format("<a href='%s'>%s</a>", redirectStr, redirectStr);
                 executeSendMessage(chatId, response +
                         "\nДля перехода по токену воспользуйтесь ссылкой: \n" + hrefStr);

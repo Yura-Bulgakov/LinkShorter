@@ -55,4 +55,14 @@ public class RegistrationDto {
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
     }
+
+    @Override
+    public String toString() {
+        return "RegistrationDto{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
+                '}';
+    }
 }

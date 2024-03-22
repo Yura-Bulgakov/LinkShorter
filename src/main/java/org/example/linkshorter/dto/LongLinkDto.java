@@ -28,4 +28,13 @@ public class LongLinkDto {
     public void setForbidden(boolean forbidden) {
         this.forbidden = forbidden;
     }
+
+    @Override
+    public String toString() {
+        return "LongLinkDto{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", forbidden=" + forbidden +
+                '}';
+    }
 }

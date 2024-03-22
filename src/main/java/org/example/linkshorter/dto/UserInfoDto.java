@@ -55,4 +55,16 @@ public class UserInfoDto {
     public void setBanned(boolean banned) {
         this.banned = banned;
     }
+
+    @Override
+    public String toString() {
+        return "UserInfoDto{" +
+                "userId=" + userId +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", tokenCounts=" + tokenCounts +
+                ", redirectCounts=" + redirectCounts +
+                ", banned=" + banned +
+                '}';
+    }
 }

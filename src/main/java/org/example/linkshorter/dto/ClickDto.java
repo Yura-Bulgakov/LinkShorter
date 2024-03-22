@@ -39,4 +39,14 @@ public class ClickDto {
     public void setClientIp(String clientIp) {
         this.clientIp = clientIp;
     }
+
+    @Override
+    public String toString() {
+        return "ClickDto{" +
+                "url='" + url + '\'' +
+                ", token='" + token + '\'' +
+                ", clickDate=" + clickDate +
+                ", clientIp='" + clientIp + '\'' +
+                '}';
+    }
 }
