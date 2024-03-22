@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: creation-long-links-table
+      author: Yury
+      changes:
+        - createTable:
+            tableName: long_links
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: long_link
+                  type: varchar(2000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: forbidden
+                  type: boolean
+                  defaultValueBoolean: false
+

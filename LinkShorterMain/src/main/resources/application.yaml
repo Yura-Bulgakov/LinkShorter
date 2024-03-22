@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+token:
+  length: 8
+  live: 3
+rkn:
+  web:
+    api: https://reestr.rublacklist.net/api/v3/domains/
+
+scheduling:
+  long-link:
+    verifier: "0 0 0 * * *"
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/link_shorter_db
+    username: postgres
+    password: 1
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+  liquibase:
+    drop-first: true
+    enabled: true
+    change-log: classpath:db/changelog/changelog-master.yaml
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+logging:
+  level:
+    root: info
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

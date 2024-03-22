@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление пользователями</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<th:block th:include="/_navbar"></th:block>
+<th:block th:include="/admin/_navbar-admin"></th:block>
+
+<div class="container mt-5">
+    <h1>Управление пользователями</h1>
+
+    <form id="searchForm" class="mt-5">
+        <div class="form-group row">
+            <label for="searchType" class="col-sm-2 col-form-label">Поиск по:</label>
+            <div class="col-sm-3">
+                <select class="form-control" id="searchType">
+                    <option value="userId">ID</option>
+                    <option value="username">Имя пользователя</option>
+                </select>
+            </div>
+            <label for="searchValue" class="col-sm-1 col-form-label">Значение:</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="searchValue">
+            </div>
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-primary" onclick="searchUsers()">Найти</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table mt-3">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Имя пользователя</th>
+            <th>Email</th>
+            <th>Количество токенов</th>
+            <th>Количество переходов</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users.content}">
+            <td th:text="${user.userId}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.tokenCounts}"></td>
+            <td th:text="${user.redirectCounts}"></td>
+            <td th:text="${user.banned ? 'Заблокирован' : 'Активен'}"></td>
+            <td th:if="${user.userId != null}">
+                <form th:action="@{/admin/users/{id}(id=${user.userId})}" th:method="patch">
+                    <input type="hidden" name="banStatus" th:value="${!user.banned}"/>
+                    <button type="submit"
+                            th:class="${user.banned ? 'btn-success' : 'btn-warning'}"
+                            th:text="${user.banned ? 'Разблокировать' : 'Заблокировать'}"></button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item" th:class="${users.first} ? 'disabled' : ''">
+                <a class="page-link"
+                   th:href="@{/admin/users(page=${users.number - 1}, size=${users.size}, userId=${#request.getParameter('userId')}, username=${#request.getParameter('username')})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <th:block th:if="${users.totalPages <= 10}">
+                <li class="page-item" th:classappend="${i == users.number + 1} ? 'active' : ''"
+                    th:each="i : ${#numbers.sequence(1, users.totalPages)}">
+                    <a class="page-link"
+                       th:href="@{/admin/users(page=${i - 1}, size=${users.size}, userId=${#request.getParameter('userId')}, username=${#request.getParameter('username')})}"
+                       th:text="${i}"></a>
+                </li>
+            </th:block>
+            <th:block th:if="${users.totalPages > 10}">
+                <li class="page-item" th:classappend="${i == users.number + 1} ? 'active' : ''"
+                    th:each="i : ${#numbers.sequence(users.number - 4, users.number + 5)}"
+                    th:if="${i >= 1 and i <= users.totalPages}">
+                    <a class="page-link"
+                       th:href="@{/admin/users(page=${i - 1}, size=${users.size}, userId=${#request.getParameter('userId')}, username=${#request.getParameter('username')})}"
+                       th:text="${i}"></a>
+                </li>
+            </th:block>
+
+            <li class="page-item disabled" th:if="${users.number + 5 < users.totalPages}">
+                <span class="page-link">...</span>
+            </li>
+
+            <li class="page-item" th:class="${users.last} ? 'disabled' : ''">
+                <a class="page-link"
+                   th:href="@{/admin/users(page=${users.number + 1}, size=${users.size}, userId=${#request.getParameter('userId')}, username=${#request.getParameter('username')})}"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<th:block th:include="/_footer"></th:block>
+
+<script>
+    function searchUsers() {
+        var searchType = document.getElementById("searchType").value;
+        var searchValue = document.getElementById("searchValue").value;
+        window.location.href = "/admin/users?" + searchType + "=" + searchValue;
+    }
+</script>
+
+</body>
+</html>

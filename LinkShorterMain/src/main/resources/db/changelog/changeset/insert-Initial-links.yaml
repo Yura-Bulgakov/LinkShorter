@@ -1,0 +1,101 @@
+databaseChangeLog:
+  - changeSet:
+      id: inserting-initial-links
+      author: Yury
+      changes:
+        - insert:
+            tableName: long_links
+            columns:
+              - column:
+                  name: long_link
+                  value: "https://sberuniversity.online/programs/22219/about"
+        - insert:
+            tableName: long_links
+            columns:
+              - column:
+                  name: long_link
+                  value: "http://localhost:8080/user"
+        - insert:
+            tableName: long_links
+            columns:
+              - column:
+                  name: long_link
+                  value: "https://stackoverflow.com/questions/61975300/mock-static-methods-in-junit5-using-powermockito"
+              - column:
+                  name: forbidden
+                  valueBoolean: true
+
+        #        домен ссылки находится в реестре запрещенных доменов
+        - insert:
+            tableName: long_links
+            columns:
+              - column:
+                  name: long_link
+                  value: "https://0-00.lordfilm0.biz/any"
+              - column:
+                  name: forbidden
+                  valueBoolean: false
+
+        - insert:
+            tableName: short_links
+            columns:
+              - column:
+                  name: token
+                  value: "SberCourse"
+              - column:
+                  name: creation_date
+                  valueDate: '2024-03-14 12:00:00'
+              - column:
+                  name: long_link_id
+                  valueComputed: "(SELECT id FROM long_links WHERE long_link = 'https://sberuniversity.online/programs/22219/about')"
+              - column:
+                  name: user_id
+                  valueComputed: "(SELECT id FROM users WHERE username = 'admin')"
+
+        - insert:
+            tableName: short_links
+            columns:
+              - column:
+                  name: token
+                  value: "test"
+              - column:
+                  name: creation_date
+                  valueDate: '2024-03-14 12:00:00'
+              - column:
+                  name: long_link_id
+                  valueComputed: "(SELECT id FROM long_links WHERE long_link = 'http://localhost:8080/user')"
+              - column:
+                  name: user_id
+                  valueComputed: "(SELECT id FROM users WHERE username = 'admin')"
+
+        - insert:
+            tableName: short_links
+            columns:
+              - column:
+                  name: token
+                  value: "banTest"
+              - column:
+                  name: creation_date
+                  valueDate: '2024-03-14 12:00:00'
+              - column:
+                  name: long_link_id
+                  valueComputed: "(SELECT id FROM long_links WHERE long_link = 'https://stackoverflow.com/questions/61975300/mock-static-methods-in-junit5-using-powermockito')"
+              - column:
+                  name: user_id
+                  valueComputed: "(SELECT id FROM users WHERE username = 'user1')"
+
+        - insert:
+            tableName: short_links
+            columns:
+              - column:
+                  name: token
+                  value: "banUserTest"
+              - column:
+                  name: creation_date
+                  valueDate: '2024-03-14 12:00:00'
+              - column:
+                  name: long_link_id
+                  valueComputed: "(SELECT id FROM long_links WHERE long_link = 'https://stackoverflow.com/questions/61975300/mock-static-methods-in-junit5-using-powermockito')"
+              - column:
+                  name: user_id
+                  valueComputed: "(SELECT id FROM users WHERE username = 'user2')"

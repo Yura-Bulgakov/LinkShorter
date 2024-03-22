@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: creation-clicks-table
+      author: Yury
+      changes:
+        - createTable:
+            tableName: clicks
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: click_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_ip
+                  type: varchar(50)
+              - column:
+                  name: short_link_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: clicks
+            baseColumnNames: short_link_id
+            referencedTableName: short_links
+            referencedColumnNames: id
+            constraintName: click_short_link_fk
+            onDelete: CASCADE
