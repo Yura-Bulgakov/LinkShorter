@@ -3,7 +3,6 @@ package org.example.linkshorterbot.state;
 import org.example.linkshorterbot.model.Constants;
 import org.example.linkshorterbot.model.RequestContainer;
 import org.example.linkshorterbot.model.TokenCreationRequest;
-import org.example.linkshorterbot.util.KeyboardFactory;
 import org.example.linkshorterbot.util.TelegramUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +12,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GenerationTokenSelectionStateHandlerTest {

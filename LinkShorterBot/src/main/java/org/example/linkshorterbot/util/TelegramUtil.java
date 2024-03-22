@@ -3,6 +3,8 @@ package org.example.linkshorterbot.util;
 import org.example.linkshorterbot.bot.TelegramBot;
 import org.example.linkshorterbot.model.TokenCreationRequest;
 import org.example.linkshorterbot.state.State;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -11,6 +13,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
 public class TelegramUtil {
+    private static final Logger logger = LoggerFactory.getLogger(TelegramUtil.class);
     private static TelegramBot bot;
     private static RestTemplate restTemplate = new RestTemplate();
 
@@ -24,6 +27,7 @@ public class TelegramUtil {
         try {
             bot.execute(sendMessage);
         } catch (TelegramApiException e) {
+            logger.error("Ошибка при отправке сообщения {}", e.toString());
             throw new RuntimeException(e);
         }
 
@@ -35,6 +39,7 @@ public class TelegramUtil {
         try {
             bot.execute(sendMessage);
         } catch (TelegramApiException e) {
+            logger.error("Ошибка при отправке сообщения c клавиатурой {}", e.toString());
             throw new RuntimeException(e);
         }
     }
@@ -50,12 +55,14 @@ public class TelegramUtil {
             }
             return State.NONE;
         } catch (RestClientException e) {
+            logger.error("Ошибка при генерации токена {}", e.toString());
             try {
                 executeSendMessage(chatId, extractErrorMessage(e.getMessage()));
                 promptWithKeyboard(chatId, "Не удалось создать токен. Попробуйте снова.",
                         KeyboardFactory.getTokenSelectionKeyboard());
                 return State.GENERATION_TOKEN_SELECTION;
             } catch (Exception ex) {
+                logger.error("Ошибка при обработке ответа от сервиса {}", ex.toString());
                 executeSendMessage(chatId, "Не удалось обработать ответ от сервиса");
                 return State.NONE;
             }

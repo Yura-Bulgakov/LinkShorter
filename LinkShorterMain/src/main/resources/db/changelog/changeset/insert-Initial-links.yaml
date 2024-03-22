@@ -25,7 +25,7 @@ databaseChangeLog:
                   name: forbidden
                   valueBoolean: true
 
-#        домен ссылки находится в реестре запрещенных доменов
+        #        домен ссылки находится в реестре запрещенных доменов
         - insert:
             tableName: long_links
             columns:

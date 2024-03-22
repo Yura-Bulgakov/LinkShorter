@@ -17,7 +17,7 @@
 
 2. Перейдите в клонированный репозиторий:
 
-       cd LinkShorter
+       cd LinkShorter\LinkShorterMain
 
 3. Соберите проект с помощью Maven:
 
@@ -203,6 +203,8 @@
 |----|----------|----------|------------|--------|
 | 1  | admin    | 1        | ROLE_ADMIN | false  |
 | 2  | user1    | 1        | ROLE_USER  | false  |
+| 3  | user2    | 1        | Role_USER  | true   |
+
 
 ## БОТ
 

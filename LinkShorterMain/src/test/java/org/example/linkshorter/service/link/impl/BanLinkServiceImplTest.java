@@ -22,7 +22,7 @@ class BanLinkServiceImplTest {
     BanLinkServiceImpl banLinkService;
 
     @Test
-    public void testBanById(){
+    public void testBanById() {
         Long linkId = 1L;
         LongLink longLink = new LongLink();
         when(longLinkRepository.findById(linkId)).thenReturn(Optional.of(longLink));
@@ -34,7 +34,7 @@ class BanLinkServiceImplTest {
     }
 
     @Test
-    public void testUnbanById(){
+    public void testUnbanById() {
         Long linkId = 1L;
         LongLink longLink = new LongLink();
         longLink.setForbidden(true);
@@ -47,7 +47,7 @@ class BanLinkServiceImplTest {
     }
 
     @Test
-    public void testBanByLongLink(){
+    public void testBanByLongLink() {
         String url = "http://localhost:123/get";
         LongLink longLink = new LongLink();
         when(longLinkRepository.findByLongLink(url)).thenReturn(Optional.of(longLink));
@@ -59,7 +59,7 @@ class BanLinkServiceImplTest {
     }
 
     @Test
-    public void testUnbanByLongLink(){
+    public void testUnbanByLongLink() {
         String url = "http://localhost:123/get";
         LongLink longLink = new LongLink();
         longLink.setForbidden(true);
@@ -72,7 +72,7 @@ class BanLinkServiceImplTest {
     }
 
     @Test
-    public void testWithNoExistingLongLink(){
+    public void testWithNoExistingLongLink() {
         Long linkId = 1L;
 
         when(longLinkRepository.findById(linkId)).thenReturn(Optional.empty());

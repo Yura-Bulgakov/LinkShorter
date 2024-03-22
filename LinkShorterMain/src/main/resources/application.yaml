@@ -1,6 +1,5 @@
 server:
   port: 8080
-  redirect-port: 8081
 
 token:
   length: 8
@@ -8,7 +7,6 @@ token:
 rkn:
   web:
     api: https://reestr.rublacklist.net/api/v3/domains/
-#    https://rknweb.ru/api/v3/domains/
 
 scheduling:
   long-link:

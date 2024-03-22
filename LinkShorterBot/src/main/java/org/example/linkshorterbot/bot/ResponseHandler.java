@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class ResponseHandler {
     private final Map<Long, State> chatStates = new HashMap<>();
-
     private final Map<String, Command> mapCommand;
 
     public ResponseHandler(Map<String, Command> mapCommand) {

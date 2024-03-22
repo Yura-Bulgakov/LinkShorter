@@ -10,8 +10,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AwaitingTokenStateHandlerTest {
@@ -26,7 +27,7 @@ class AwaitingTokenStateHandlerTest {
             message.setText(token);
             TokenCreationRequest request = new TokenCreationRequest();
             request.setToken(token);
-            Update update =  new Update();
+            Update update = new Update();
             update.setMessage(message);
             RequestContainer.container.put(chatId, request);
 
@@ -44,7 +45,7 @@ class AwaitingTokenStateHandlerTest {
             AwaitingTokenStateHandler handler = new AwaitingTokenStateHandler();
             long chatId = 1L;
             Message message = new Message();
-            Update update =  new Update();
+            Update update = new Update();
             update.setMessage(message);
 
             State result = handler.apply(chatId, update);

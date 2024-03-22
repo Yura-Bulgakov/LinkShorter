@@ -2,6 +2,8 @@ package org.example.linkshorterbot.bot;
 
 import org.example.linkshorterbot.Command.Command;
 import org.example.linkshorterbot.util.TelegramUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -18,19 +20,17 @@ import java.util.stream.Collectors;
 
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Value("${path.token.generation}")
     private String tokenGenerationPath;
     @Value("${path.redirect}")
     private String redirectPath;
     private final ResponseHandler responseHandler;
-    private final Map<String, Command> mapCommand;
-
     @Value("${bot.name}")
     private String botName;
 
     protected TelegramBot(Map<String, Command> mapCommand, @Value("${bot.token}") String botToken) {
         super(new String(Base64.getDecoder().decode(botToken)));
-        this.mapCommand = mapCommand;
         responseHandler = new ResponseHandler(mapCommand);
         TelegramUtil.setSender(this);
         List<BotCommand> listOfCommands = mapCommand.entrySet().stream()
@@ -39,7 +39,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         try {
             this.execute(new SetMyCommands(listOfCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            logger.error("Ошибка при загрузке команд: {} ", e.getMessage());
         }
     }
 
@@ -50,6 +50,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         } else if (update.hasCallbackQuery()) {
             responseHandler.replyHandling(update.getCallbackQuery().getFrom().getId(), update);
         } else {
+            logger.error("Не поддерживаемое сообщение {} ", update);
             throw new RuntimeException("Не удалось установить id чата");
         }
     }
