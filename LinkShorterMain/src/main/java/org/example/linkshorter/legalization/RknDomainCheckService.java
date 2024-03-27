@@ -30,12 +30,8 @@ public class RknDomainCheckService implements DomainCheckService {
         List<LongLink> longLinks = longLinkRepository.findAllByForbiddenFalse();
         longLinks.parallelStream()
                 .map(LongLink::getLongLink)
-                .forEach(x -> {
-                    String domain = linkValidator.getDomain(x);
-                    if (blockedDomains.contains(domain)) {
-                        banLinkService.banByLongLink(x);
-                    }
-                });
+                .filter(x -> blockedDomains.contains(linkValidator.getDomain(x)))
+                .forEach(banLinkService::banByLongLink);
     }
 
 }
